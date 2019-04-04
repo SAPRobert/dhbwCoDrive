@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+
+
+
 <html>
 <title>DHBW CoDrive</title>
 <meta charset="UTF-8">
@@ -11,6 +14,10 @@
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 </style>
 <body class="w3-light-grey">
+	
+	
+	
+
 
 <!-- Navigation Bar -->
 <div class="w3-bar w3-white w3-large">
@@ -90,41 +97,65 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
     </div>
   </div>
 
-  <div class="w3-row-padding w3-padding-16">
-    <div class="w3-third w3-margin-bottom">
-      <img src="/w3images/room_single.jpg" alt="Norway" style="width:100%">
-      <div class="w3-container w3-white">
-        <h3>Single Room</h3>
-        <h6 class="w3-opacity">From $99</h6>
-        <p>Single bed</p>
-        <p>15m<sup>2</sup></p>
-        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i></p>
-        <button class="w3-button w3-block w3-black w3-margin-bottom">Choose Room</button>
-      </div>
-    </div>
-    <div class="w3-third w3-margin-bottom">
-      <img src="/w3images/room_double.jpg" alt="Norway" style="width:100%">
-      <div class="w3-container w3-white">
-        <h3>Double Room</h3>
-        <h6 class="w3-opacity">From $149</h6>
-        <p>Queen-size bed</p>
-        <p>25m<sup>2</sup></p>
-        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i> <i class="fa fa-tv"></i></p>
-        <button class="w3-button w3-block w3-black w3-margin-bottom">Choose Room</button>
-      </div>
-    </div>
-    <div class="w3-third w3-margin-bottom">
-      <img src="/w3images/room_deluxe.jpg" alt="Norway" style="width:100%">
-      <div class="w3-container w3-white">
-        <h3>Deluxe Room</h3>
-        <h6 class="w3-opacity">From $199</h6>
-        <p>King-size bed</p>
-        <p>40m<sup>2</sup></p>
-        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i> <i class="fa fa-tv"></i> <i class="fa fa-glass"></i> <i class="fa fa-cutlery"></i></p>
-        <button class="w3-button w3-block w3-black w3-margin-bottom">Choose Room</button>
-      </div>
-    </div>
-  </div>
+<div class="w3-row-padding w3-padding-16">
+	<?php
+		$servername = 'localhost';
+		$username = 'root';
+		$password = '';
+		$dbname = 'codrive';
+
+		$con = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$con) {
+			die('Could not connect: ' . mysqli_error($con));
+			}
+
+		mysqli_select_db($con,"codrive");
+		$con->set_charset("utf8");
+	
+		/*if($q=="Alles"){
+			$sql="SELECT * FROM produkte";
+		}
+		else{
+			$sql="SELECT * FROM produkte WHERE prod_kat = '".$q."'";
+		}*/
+		//$sql="SELECT * FROM produkte WHERE prod_kat = '".$q."' AND ";
+		//$sql="SELECT * FROM `fahrten` WHERE `zielort` = 'DHBW Mannheim Coblitzalle' AND `anzP` = '1'" ;
+		$sql="SELECT * FROM fahrten";
+		$result = mysqli_query($con,$sql);
+
+		/*$func="showOneProduct(this.id)";
+		$class="scroll";
+
+		while ($row = mysqli_fetch_array($result)) {
+			$id=$row['id'];
+
+			echo   "<li id=$id onclick=$func >" .
+				   $row['abOrt'] .
+				   "<span class=$class>" .
+				   number_format($row['preis'], 2, ',', '.') . "€" .
+				   "</span>" .
+				   "</li>";
+		};*/
+		while ($row = mysqli_fetch_array($result)) {
+			$id=$row['id'];
+			echo  	'<div class="w3-third w3-margin-bottom">' .
+						'<div class="w3-container w3-white">' .
+							"<h3>" . $row['abOrt'] . "</h3>" .
+							"<h6>" . "nach" . "</h6>" .
+							"<h3>" . $row['zielort'] . "</h3>" .
+							'<h6 class="w3-opacity">' .
+								"Preis: ".
+								number_format($row['preis'], 2, ',', '.') . "€"."</h6>".
+							"<p>"."am ".$row['abDatum']." um ".$row['abZeit']."</p>" .
+							"<p>"."für ".$row['anzP']." Person(en)"."</p>" .
+							"<button id=$id". ' class="w3-button w3-block w3-black w3-margin-bottom">'."Buchen"."</button>".
+						"</div>".
+					"</div>";
+		};
+		mysqli_close($con);
+	?>
+	
+</div>
 
   <div class="w3-row-padding" id="about">
     <div class="w3-col l4 12">
