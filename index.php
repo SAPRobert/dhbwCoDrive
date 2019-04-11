@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<script src="/dhbwCoDrive/js/js.js"></script>
+
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 </style>
@@ -29,17 +31,32 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 </div>
 <!-- Header -->
 <header class="w3-display-container w3-content" style="max-width:1500px;">
+	
+	<?php
+		//$abOrt = "";
+		$zielort = "";
+		$abDatum = "";
+		$abZeit = "";
+		$anzP = "";
+		$abOrt = "%".strval($_GET['Abfahrtsort'])."%";
+		$zielort = "%" . strval($_GET['Zielort']) ."%";
+		$abDatum = "%" . strval($_GET['Abfahrtsdatum']) ."%";
+		$abZeit = "%" . strval($_GET['Abfahrtszeit']) ."%";
+		$anzP = "%" . strval($_GET['Personenzahl']) ."%";
+	?>
+	
+	
   <img class="w3-image" src="src/hotel.jpg" alt="The Hotel" style="min-width:1000px" width="100%" height="800">
   <div class="w3-display-left w3-padding w3-col l6 m8">
     <div class="w3-container w3-red">
       <h2><i class="fas fa-map-marker-alt w3-margin-right"></i>DHBW CoDrive</h2>
     </div>
     <div class="w3-container w3-white w3-padding-16">
-      <form action="/action_page.php" target="_blank">
+      <form action="index.php" method="get" >
         <div class="w3-row-padding" style="margin:0 -16px;">
           <div class="w3-half w3-margin-bottom">
             <label><i class="fa fa-calendar-o"></i> Abfahrtsort</label>
-            <input class="w3-input w3-border" type="text" placeholder="Bsp. Hafenstraße 35, Mannheim" name="Abfahrtsort" required>
+            <input class="w3-input w3-border" type="text" placeholder="Bsp. Hafenstraße 35, Mannheim" name="Abfahrtsort" value=<?php if (isset($abOrt)) echo $abOrt;?> required>
           </div>
           <div class="w3-half">
             <label><i class="fa fa-calendar-o"></i> Zielort</label>
@@ -60,7 +77,8 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
           <input class="w3-input w3-border" type="number" value="1" name="Personenzahl" min="1" max="6" required>
           </div>
         </div>
-        <button class="w3-button w3-dark-grey" type="submit"><i class="fa fa-search w3-margin-right"></i>Nach Fahrten suchen</button>
+        <button class="w3-button w3-dark-grey" type="submit">
+			<i class="fa fa-search w3-margin-right"></i>Nach Fahrten suchen</button>
       </form>
     </div>
   </div>
@@ -103,7 +121,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 		$username = 'root';
 		$password = '';
 		$dbname = 'codrive';
-
+		
+	echo $abOrt;
+	echo $zielort;
 		$con = mysqli_connect($servername, $username, $password, $dbname);
 			if (!$con) {
 			die('Could not connect: ' . mysqli_error($con));
@@ -118,9 +138,8 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
 		else{
 			$sql="SELECT * FROM produkte WHERE prod_kat = '".$q."'";
 		}*/
-		//$sql="SELECT * FROM produkte WHERE prod_kat = '".$q."' AND ";
-		//$sql="SELECT * FROM `fahrten` WHERE `zielort` = 'DHBW Mannheim Coblitzalle' AND `anzP` = '1'" ;
-		$sql="SELECT * FROM fahrten";
+		$sql="SELECT * FROM `fahrten` WHERE `zielort` LIKE '".$zielort."' AND `abOrt` LIKE '".$abOrt."' AND `abDatum` LIKE '".$abDatum."' AND `abZeit` LIKE '".$abZeit."'"  ;
+		//$sql="SELECT * FROM fahrten";
 		$result = mysqli_query($con,$sql);
 
 		/*$func="showOneProduct(this.id)";
